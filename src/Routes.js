@@ -28,8 +28,9 @@ import UsersPage from '@/pages/Users/Users';
 // Orders
 import OrdersPage from '@/pages/Orders/Orders';
 
-// // report  Report
-// import ReportPage from '@/pages/Reports/Reports';
+//report  Statements
+import StatementsPage from '@/pages/Statements/Statements';
+
 
 
 Vue.use(Router);
@@ -96,6 +97,11 @@ export default new Router({
             path: 'orders',
             name: 'OrdersPage',
             component: OrdersPage,
+        },
+        {
+            path: 'statements',
+            name: 'StatementsPage',
+            component: StatementsPage,
         },
       ],
     },

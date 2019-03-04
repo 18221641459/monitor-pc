@@ -24,9 +24,9 @@
       />
       <NavLink
               header="数据报表"
-              link="/app/users"
+              link="/app/statements"
               iconName="flaticon-user"
-              index="users"
+              index="statements"
               isHeader
       />
       <NavLink

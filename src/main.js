@@ -4,6 +4,8 @@ import 'expose-loader?jQuery!jquery' // eslint-disable-line
 import 'expose-loader?$!jquery' // eslint-disable-line
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue';
 import * as VueGoogleMaps from 'vue2-google-maps';
@@ -15,11 +17,11 @@ import axios from 'axios'
 import store from './store';
 import router from './Routes';
 import App from './App';
-// import $ from 'jquery';
+import $ from 'jquery';
 
 
 
-// Vue.use(axios);
+Vue.use(axios);
 Vue.prototype.$axios = axios
 
 Vue.use(BootstrapVue);
@@ -30,6 +32,8 @@ Vue.use(VueGoogleMaps, {
     key: 'AIzaSyB7OXmzfQYua_1LEhRdqsoYzyJOPh9hGLg',
   },
 });
+
+Vue.use(ElementUI);
 
 Vue.config.productionTip = false;
 

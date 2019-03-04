@@ -2,82 +2,102 @@
     <div class="tables-basic">
         <b-breadcrumb>
             <b-breadcrumb-item>您的位置</b-breadcrumb-item>
-            <b-breadcrumb-item active>商品管理</b-breadcrumb-item>
+            <b-breadcrumb-item active>订单管理</b-breadcrumb-item>
         </b-breadcrumb>
-        <h2 class="page-title">Tables - <span class="fw-semi-bold">Static</span></h2>
+        <!--<h2 class="page-title"><span class="fw-semi-bold">用户列表</span></h2>-->
+        <div id="screen">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">用户</span>
+                </div>
+                <input type="text" class="form-control" v-model="searchNames"  aria-label="Default" aria-describedby="inputGroup-sizing-default">
+            </div>
+			<div class="input-group mb-3">
+			    <div class="input-group-prepend">
+			        <span class="input-group-text">流水号</span>
+			    </div>
+			    <input type="text" class="form-control" v-model="searchSerial"  aria-label="Default" aria-describedby="inputGroup-sizing-default">
+			</div>
+            <button type="button" v-on:click="search" class="btn btn-sm btn-outline-secondary ">查询</button>
+        </div>
+
+
         <b-row>
             <b-col>
-                <Widget
-                        title="<h5>Table <span class='fw-semi-bold'>Styles</span></h5>"
-                        customHeader settings close
+                <Widget title="<h5><span class='fw-semi-bold'>订单列表</span></h5>"
+                        customHeader  close
                 >
                     <div class="table-resposive">
-                        <table class="table">
+                        <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th class="hidden-sm-down">#</th>
-                                <th>订单流水号</th>
-                                <th class="hidden-sm-down">用户</th>
-                                <th class="hidden-sm-down">总价</th>
-                                <th class="hidden-sm-down">包含商品</th>
-                                <th class="hidden-sm-down">增值服务</th>
-                                <th class="hidden-sm-down">备注</th>
+                                <th class="hidden-sm-down" style="-moz-column-rule-width: medium;">流水号</th>
+                                <th class="hidden-sm-down" style="width: 150px">用户名</th>
+                                <th class="hidden-sm-down">消费</th>
+                                <th class="hidden-sm-down">订单内容</th>
+                                <th class="hidden-sm-down">日期</th>
+                                <th class="hidden-sm-down">订单状态</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="row in tableStyles" :key="row.id">
-                                <td>{{row.id}}</td>
+                            <tr v-for="row in originalArray.list">
                                 <td>
-                                    {{row.user}}
+									{{row.serial}}
+								</td>
+                                <td>
+                                    {{row.user_name}}
                                 </td>
                                 <td>
-                                    {{row.wxID}}
+                                    {{row.price}}
+                                </td>
+								<td>
+									{{row.context}}
+								</td>
+                                <td>
+                                    {{row.order_date}}
                                 </td>
                                 <td>
-                                    {{row.senior}}
-                                </td>
-                                <td class="text-semi-muted">
-                                    {{row.integral}}
-                                </td>
-                                <td class="text-semi-muted">
-                                    {{row.tellPhone}}
-                                </td>
-                                <td class="text-semi-muted">
-                                    {{row.email}}
-                                </td>
-                                <td class="text-semi-muted">
-                                    {{row.contact}}
+                                    {{row.status}}
                                 </td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="clearfix">
-                        <div class="float-right">
-                            <b-button variant="default" class="mr-xs" size="sm">添加</b-button>
-                            <b-button variant="default" class="mr-xs" size="sm">添加</b-button>
-                            <b-button variant="default" class="mr-xs" size="sm">添加</b-button>
-                            <b-button variant="default" class="mr-xs" size="sm">添加</b-button>
-                            <b-dropdown variant="inverse" class="mr-xs" size="sm" text="Clear" right>
-                                <b-dropdown-item>Clear</b-dropdown-item>
-                                <b-dropdown-item>Move ...</b-dropdown-item>
-                                <b-dropdown-item>Something else here</b-dropdown-item>
-                                <b-dropdown-divider />
-                                <b-dropdown-item>Separated link</b-dropdown-item>
-                            </b-dropdown>
-                        </div>
-                        <!--<p>Basic table with styled content</p>-->
 
-                    </div>
+                        <div class="clearfix">
+                            <nav class="page-bar" aria-label="Page navigation example">
+                                <ul class="pagination">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Previous">
+                                            <span aria-hidden="true" v-on:click="prePage" >&laquo;</span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                    </li>
+                                    <li v-for="pages in originalArray.navigatepageNums" class="page-item"><a class="page-link"  v-on:click="thisPage({pages})" >{{pages}}</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Next">
+                                            <span  v-on:click="nextPage" aria-hidden="true">&raquo;</span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+
+                        </div>
+
                 </Widget>
             </b-col>
         </b-row>
+
     </div>
+
 </template>
 
 <script>
+    import 'bootstrap/dist/css/bootstrap.min.css'
+    import 'bootstrap/dist/js/bootstrap.min.js'
     import axios from 'axios'
-    import $ from 'jquery';
+    // import $ from 'jquery';
     import Vue from 'vue';
     import Widget from '@/components/Widget/Widget';
     import 'imports-loader?jQuery=jquery,this=>window!jquery-sparkline'; // eslint-disable-line
@@ -87,92 +107,90 @@
         components: { Widget },
         data() {
             return {
-                tableStyles: [
-                    {
-                        id: 1,
-                        user: 'admin',
-                        wxID: 'weixinid',
-                        senior: 3,
-                        integral: 300,
-                        tellPhone: '13012345678',
-                        email: '13012345678',
-                        contact: '上海市浦东新区丁香路750号'
-                    },
-                    {
-                        id: 2,
-                        user: 'admin',
-                        wxID: 'weixinid',
-                        senior: 3,
-                        integral: 300,
-                        tellPhone: '13012345678',
-                        email: '13012345678',
-                        contact: '上海市浦东新区丁香路750号'
-                    },
-                    {
-                        id: 3,
-                        user: 'admin',
-                        wxID: 'weixinid',
-                        senior: 3,
-                        integral: 300,
-                        tellPhone: '13012345678',
-                        email: '13012345678',
-                        contact: '上海市浦东新区丁香路750号'
-                    },
-
-
-                ],
+                searchNames: '',
+				searchSerial: '',
+                handledArray: [],
+                originalArray: [],
             };
         },
         methods: {
-            parseDate(date) {
-                const dateSet = date.toDateString().split(' ');
-                return `${date.toLocaleString('en-us', { month: 'long' })} ${dateSet[2]}, ${dateSet[3]}`;
+            search() {
+                let userName = this.searchNames;
+				let serial = this.searchSerial;
+				const url ='http://localhost:4431/orders/queryAllOrders';
+				var params = new URLSearchParams();
+				params.append("USER_NAME",userName);
+				params.append("SERIAL",serial);
+				this.$axios({
+					method: 'post',
+					url:url,
+					data:params
+				},{headers: {
+						'Access-Control-Allow-Origin' : 'http://localhost:4431',
+					}}
+					).then((res)=>{
+					this.originalArray = res.data;
+				});
             },
-            checkAll(ev, checkbox) {
-                const checkboxArr = (new Array(this[checkbox].length)).fill(ev.target.checked);
-                Vue.set(this, checkbox, checkboxArr);
-            },
-            changeCheck(ev, checkbox, id) {
-                this[checkbox][id] = ev.target.checked;
-                if (!ev.target.checked) {
-                    this[checkbox][0] = false;
-                }
-            },
-            getRandomData() {
-                const result = [];
-
-                for (let i = 0; i <= 8; i += 1) {
-                    result.push(Math.floor(Math.random() * 20) + 1);
-                }
-
-                return result;
-            },
-            initCharts() {
-                const colors = ['#547fff', '#9964e3', '#f55d5d', '#ffc247', '#3abf94'];
-                $.each($('.sparkline-chart'), (id, chart) => {
-                    $(chart).sparkline(this.getRandomData(), {
-                        type: 'bar',
-                        barColor: colors[Math.floor(Math.random() * colors.length)],
-                    });
-                });
-            },
+			prePage() {
+				const url ='http://localhost:4431/orders/queryAllOrders';
+				var params = new URLSearchParams();
+				params.append("PageNum",this.originalArray.pageNum-1);
+				this.$axios({
+					method: 'post',
+					url:url,
+					data:params
+				},{headers: {
+						'Access-Control-Allow-Origin' : 'http://localhost:4431',
+					}}
+					).then((res)=>{
+					this.originalArray = res.data;
+				});
+			},
+			nextPage() {
+				const url ='http://localhost:4431/orders/queryAllOrders';
+				var params = new URLSearchParams();
+				params.append("PageNum",this.originalArray.pageNum+1);
+				this.$axios({
+					method: 'post',
+					url:url,
+					data:params
+				},{headers: {
+						'Access-Control-Allow-Origin' : 'http://localhost:4431',
+					}}
+					).then((res)=>{
+					this.originalArray = res.data;
+				});
+			},
+			thisPage(pages) {
+				const url ='http://localhost:4431/orders/queryAllOrders';
+				var params = new URLSearchParams();
+				params.append("PageNum",pages.pages);
+				this.$axios({
+					method: 'post',
+					url:url,
+					data:params
+				},{headers: {
+						'Access-Control-Allow-Origin' : 'http://localhost:4431',
+					}}
+					).then((res)=>{
+					this.originalArray = res.data;
+				});
+			}
         },
         mounted() {
             var _this= this;
-            this.initCharts();
-            axios.post('http://localhost:8087/queryUsers', {
+            axios.post('http://localhost:4431/orders/queryAllOrders', {
                 params:{
-                    // user:"admin"
+
                 }},
                 {headers: {
-                    'Access-Control-Allow-Origin' : 'http://localhost:8087'
+                    'Access-Control-Allow-Origin' : 'http://localhost:4431'
                 }}
 
             ).then(function(res){
-                // console.log(res)
-                _this.tableStyles = res.data;
-            }).catch(function(err){
-                console.log(err)
+                _this.originalArray = res.data;
+                _this.handledArray = res.data;
             })
 
         },

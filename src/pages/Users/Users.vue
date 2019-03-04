@@ -37,52 +37,77 @@
                             <thead>
                             <tr>
                                 <th class="hidden-sm-down">
-                                #
+                                    #
                                 </th>
                                 <th>用户名</th>
-                                <!--<th>微信号</th>-->
-                                <th class="hidden-sm-down">星级</th>
-                                <th class="hidden-sm-down">积分</th>
                                 <th class="hidden-sm-down">手机号</th>
                                 <th class="hidden-sm-down">邮箱</th>
                                 <th class="hidden-sm-down">联系地址</th>
+                                <th class="hidden-sm-down">注册日期</th>
+                                <th class="hidden-sm-down">状态</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr v-for="row in originalArray" :key="row.id">
                                 <td>{{row.id}}</td>
                                 <td>
-                                    {{row.user}}
+                                    {{row.userName}}
                                 </td>
-                                <!--<td>-->
-                                    <!--{{row.wxID}}-->
-                                <!--</td>-->
                                 <td>
-                                    {{row.senior}}
-                                </td>
-                                <td class="text-semi-muted">
-                                    {{row.integral}}
-                                </td>
-                                <td class="text-semi-muted">
-                                    {{row.tellPhone}}
+                                    {{row.cellPhone}}
                                 </td>
                                 <td class="text-semi-muted">
                                     {{row.email}}
                                 </td>
                                 <td class="text-semi-muted">
-                                    {{row.contact}}
+                                    {{row.contactAddress}}
+                                </td>
+                                <td class="text-semi-muted">
+                                    {{row.registerDate}}
+                                </td>
+                                <td class="text-semi-muted">
+                                    {{row.status == 0 ? "正常" : "注销"}}
+                                    <!--item.day>0?item.resource:''-->
                                 </td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="clearfix">
-                        <div class="float-right">
-                            <b-button variant="default" class="mr-xs" size="sm">冻结/解冻</b-button>
-                        </div>
-                        <!--<p>Basic table with styled content</p>-->
 
+
+
+
+
+                    <div class="clearfix">
+                        <nav class="page-bar" >
+                            <ul class="pagination">
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+
+                        <!--<div class="float-right">-->
+                        <!--<b-button variant="default" class="mr-xs" size="sm">冻结/解冻</b-button>-->
+                        <!--</div>-->
+                        <!--<p>Basic table with styled content</p>-->
                     </div>
+
+
+
+
                 </Widget>
             </b-col>
         </b-row>
@@ -104,13 +129,69 @@
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</div>
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+
+                    <b-row>
+                        <b-col >
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="userName">用户名</span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Username" >
+                            </div>
+                        </b-col>
+                        <b-col >
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="callPhone">手机号</span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="callPhone" v-model="detail.callPhone" >
+                            </div>
+                        </b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col >
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="eMail">邮箱</span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="callPhone" v-model="detail.callPhone" >
+                            </div>
+                        </b-col>
+                        <b-col >
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="contactAddr">地址</span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="callPhone" v-model="detail.callPhone" >
+                            </div>
+                        </b-col>
+                    </b-row>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="registerDate">注册日期</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="callPhone" v-model="detail.callPhone" >
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="status">状态</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="callPhone" v-model="detail.callPhone" >
+                    </div>
+
+                </div>
                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</div>
                 <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</div>
             </div>
 
-
         </Widget>
+
+        <el-date-picker
+                v-model="value1"
+                type="date"
+                placeholder="选择日期">
+        </el-date-picker>
 
 
     </div>
@@ -132,52 +213,20 @@
 
     export default {
         name: 'Users',
-        components: { Widget },
+        components: { Widget},
         data() {
             return {
+                value1: '',
                 searchNames: '',
                 handledArray: [],
-                originalArray: [
-                    {
-                        id: 1,
-                        user: 'admin',
-                        wxID: 'weixinid',
-                        senior: 'VIP1',
-                        integral: 300,
-                        tellPhone: '13012345678',
-                        email: '13012345678',
-                        contact: '上海市浦东新区丁香路750号'
-                    },
-                    {
-                        id: 2,
-                        user: 'admin',
-                        wxID: 'weixinid',
-                        senior: 'VIP2',
-                        integral: 300,
-                        tellPhone: '13012345678',
-                        email: '13012345678',
-                        contact: '上海市浦东新区丁香路750号'
-                    },
-                    {
-                        id: 3,
-                        user: 'admin',
-                        wxID: 'weixinid',
-                        senior: 'VIP3',
-                        integral: 300,
-                        tellPhone: '13012345678',
-                        email: '13012345678',
-                        contact: '上海市浦东新区丁香路750号'
-                    },
-
-
-                ],
+                originalArray: [],
+                detail:{
+                    callPhone : "ertrytrervb"
+                },
             };
         },
         methods: {
-            // selectVIP: function(vip) {
-            //     console.log(vip);
-            //     // alert(vip);
-            // },
+
             searchName() {
                 let handledArray = [];
                 let originalArray = this.originalArray;
@@ -249,18 +298,17 @@
             },
         },
         mounted() {
+
+
+
             var _this= this;
-            this.initCharts();
-            axios.post('http://localhost:8087/queryUsers', {
-                params:{
-                    // user:"admin"
-                }},
+
+            axios.post('http://localhost:4431/acquireCustoner',
                 {headers: {
-                    'Access-Control-Allow-Origin' : 'http://localhost:8087'
-                }}
+                    // 'Access-Control-Allow-Origin' : 'http://localhost:4431',
+                'Content-Type':'application/x-www-form-urlencoded'}}
 
             ).then(function(res){
-                // console.log(res)
                 _this.originalArray = res.data;
                 _this.handledArray = res.data;
             })
