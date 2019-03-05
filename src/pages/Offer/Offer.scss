@@ -1,0 +1,26 @@
+@import '../../styles/app';
+
+.tables-basic {
+  .table th {
+    font-size: $font-size-sm;
+  }
+}
+#screen{
+  display: flex;
+}
+.input-group{
+  width: 240px;
+  margin: 0 16px;
+}
+#screen .btn{
+  position: relative;
+  float: right;
+  width: 120px;
+  height: 32px;
+}
+.page-bar{
+  width: 50%;
+}
+.clearfix{
+  display: flex;
+}
