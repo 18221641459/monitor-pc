@@ -14,7 +14,7 @@
             </div>
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                    <label class="input-group-text" for="VIPSelect">星级</label>
+                    <label class="input-group-text" >星级</label>
                 </div>
                 <select class="custom-select" id="VIPSelect">
                     <option value="all" selected>全部</option>
@@ -30,8 +30,9 @@
         <b-row>
             <b-col>
                 <Widget title="<h5><span class='fw-semi-bold'>用户列表</span></h5>"
-                        customHeader  close
+                        customHeader
                 >
+
                     <div class="table-resposive">
                         <table class="table table-striped">
                             <thead>
@@ -48,9 +49,9 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="row in originalArray" :key="row.id">
+                            <tr  v-for="row in originalArray" :key="row.id">
                                 <td>{{row.id}}</td>
-                                <td>
+                                <td v-on:click="showDetail" :data-id="row.id">
                                     {{row.userName}}
                                 </td>
                                 <td>
@@ -74,38 +75,15 @@
                         </table>
                     </div>
 
-
-
-
-
-                    <div class="clearfix">
-                        <nav class="page-bar" >
-                            <ul class="pagination">
-                                <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-
-                        <!--<div class="float-right">-->
-                        <!--<b-button variant="default" class="mr-xs" size="sm">冻结/解冻</b-button>-->
-                        <!--</div>-->
-                        <!--<p>Basic table with styled content</p>-->
-                    </div>
-
-
+                    <el-pagination
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            :current-page.sync="currentPage"
+                            :page-size="pageSize"
+                            :page-sizes="[5, 10, 15, 20]"
+                            layout="sizes, prev, pager, next, jumper"
+                            :total="total">
+                    </el-pagination>
 
 
                 </Widget>
@@ -114,85 +92,44 @@
 
 
 
-        <Widget title="<h5><span class='fw-semi-bold'>详细信息</span></h5>"
-                customHeader  close
+        <Widget v-show="isShow"  title="<h5><span class='fw-semi-bold'>详细信息</span></h5>"
+                customHeader
         >
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">基本信息</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">资产信息</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">星级</a>
-                </li>
-            </ul>
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div v-on:click="closeDetail"  class="icon-list-item"><span v-on:click="closeDetail"  class="glyphicon glyphicon-remove" /></div>
+            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+                <el-tab-pane label="用户管理" name="userManager">
 
-                    <b-row>
-                        <b-col >
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="userName">用户名</span>
-                                </div>
-                                <input type="text" class="form-control" placeholder="Username" >
-                            </div>
-                        </b-col>
-                        <b-col >
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="callPhone">手机号</span>
-                                </div>
-                                <input type="text" class="form-control" placeholder="callPhone" v-model="detail.callPhone" >
-                            </div>
-                        </b-col>
-                    </b-row>
-                    <b-row>
-                        <b-col >
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="eMail">邮箱</span>
-                                </div>
-                                <input type="text" class="form-control" placeholder="callPhone" v-model="detail.callPhone" >
-                            </div>
-                        </b-col>
-                        <b-col >
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="contactAddr">地址</span>
-                                </div>
-                                <input type="text" class="form-control" placeholder="callPhone" v-model="detail.callPhone" >
-                            </div>
-                        </b-col>
-                    </b-row>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="registerDate">注册日期</span>
-                        </div>
-                        <input type="text" class="form-control" placeholder="callPhone" v-model="detail.callPhone" >
-                    </div>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="status">状态</span>
-                        </div>
-                        <input type="text" class="form-control" placeholder="callPhone" v-model="detail.callPhone" >
-                    </div>
+                    <el-form ref="form" :model="form" label-width="80px" >
+                        <el-form-item label="用户名">
+                            <el-input class="userImput" v-model="form.name"></el-input>
+                        </el-form-item>
+                        <el-form-item label="手机号">
+                            <el-input  class="userImput" v-model="form.cellPhone"></el-input>
+                        </el-form-item>
+                        <el-form-item label="邮箱">
+                            <el-input class="userImput" v-model="form.email"></el-input>
+                        </el-form-item>
+                        <el-form-item label="联系地址">
+                            <el-input class="userImput" v-model="form.contactAddress"></el-input>
+                        </el-form-item>
+                        <el-form-item label="注册日期">
+                            <el-input class="userImput" v-model="form.registerDate"></el-input>
+                        </el-form-item>
+                        <el-form-item label="状态">
+                            <el-input class="userImput" v-model="form.status"></el-input>
+                        </el-form-item>
 
-                </div>
-                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</div>
-                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</div>
-            </div>
+                    </el-form>
+
+                </el-tab-pane>
+                <el-tab-pane label="配置管理" name="propertyManager">资产信息</el-tab-pane>
+                <el-tab-pane label="角色管理" name="seniorManager">星级</el-tab-pane>
+
+            </el-tabs>
+
+
 
         </Widget>
-
-        <el-date-picker
-                v-model="value1"
-                type="date"
-                placeholder="选择日期">
-        </el-date-picker>
-
 
     </div>
 
@@ -205,17 +142,32 @@
 <script>
     import 'bootstrap/dist/css/bootstrap.min.css'
     import 'bootstrap/dist/js/bootstrap.min.js'
-    import axios from 'axios'
+    // import axios from 'axios'
     import $ from 'jquery';
-    import Vue from 'vue';
+    // import Vue from 'vue';
     import Widget from '@/components/Widget/Widget';
     import 'imports-loader?jQuery=jquery,this=>window!jquery-sparkline'; // eslint-disable-line
 
     export default {
         name: 'Users',
-        components: { Widget},
+        components: { Widget },
         data() {
             return {
+                isShow: false,
+                form: {
+                    name: '',
+                    cellPhone: '',
+                    email: '',
+                    date2: '',
+                    delivery: false,
+                    type: [],
+                    resource: '',
+                    desc: ''
+                },
+                currentPage: 5,
+                pageSize : 5,
+                total: 10,
+                activeName: 'userManager',
                 value1: '',
                 searchNames: '',
                 handledArray: [],
@@ -227,6 +179,41 @@
         },
         methods: {
 
+            /**
+             * 展示详情
+             */
+            showDetail(event){
+                this.isShow = true
+                console.log(event.currentTarget.dataset.id)
+                // console.log(event.srcElement.key)
+            },
+            closeDetail(){
+                this.isShow = false
+            },
+            onSubmit() {
+                console.log('submit!');
+            },
+
+            handleClick(tab, event) {
+
+                console.log(tab, event);
+            },
+            /**
+             * 给变每页显示数量
+             */
+            handleSizeChange(val) {
+                // console.log(`每页 ${val} 条`);
+                this.pageSize = val;
+                this.acquireCustoner(1,val);
+            },
+
+            /**
+             *翻页
+             */
+            handleCurrentChange(val) {
+                // console.log(`当前页: ${val}`);
+                this.acquireCustoner(val,this.pageSize );
+            },
             searchName() {
                 let handledArray = [];
                 let originalArray = this.originalArray;
@@ -264,54 +251,37 @@
                 }
                 this.handledArray = handledArray;
             },
-            parseDate(date) {
-                const dateSet = date.toDateString().split(' ');
-                return `${date.toLocaleString('en-us', { month: 'long' })} ${dateSet[2]}, ${dateSet[3]}`;
-            },
-            checkAll(ev, checkbox) {
-                const checkboxArr = (new Array(this[checkbox].length)).fill(ev.target.checked);
-                Vue.set(this, checkbox, checkboxArr);
-            },
-            changeCheck(ev, checkbox, id) {
-                this[checkbox][id] = ev.target.checked;
-                if (!ev.target.checked) {
-                    this[checkbox][0] = false;
-                }
-            },
-            getRandomData() {
-                const result = [];
 
-                for (let i = 0; i <= 8; i += 1) {
-                    result.push(Math.floor(Math.random() * 20) + 1);
-                }
-
-                return result;
-            },
-            initCharts() {
-                const colors = ['#547fff', '#9964e3', '#f55d5d', '#ffc247', '#3abf94'];
-                $.each($('.sparkline-chart'), (id, chart) => {
-                    $(chart).sparkline(this.getRandomData(), {
-                        type: 'bar',
-                        barColor: colors[Math.floor(Math.random() * colors.length)],
-                    });
+            /**
+             * 分页查询用户信息
+             * @param pageNum
+             * @param pageSize
+             */
+            acquireCustoner(pageNum, pageSize){
+                var params = new URLSearchParams();
+                params.append("pageNum",pageNum);
+                params.append("pageSize",pageSize);
+                var url = 'http://localhost:4431/acquireCustoner';
+                this.$axios({
+                        method: 'post',
+                        url:url,
+                        data:params
+                    },{headers: {
+                            'Access-Control-Allow-Origin' : 'http://localhost:4431',
+                        }}
+                ).then((res)=>{
+                    // console.log(res.data)
+                    this.originalArray = res.data.list;
+                    this.pageSize = res.data.pageSize;
+                    this.total = res.data.total;
                 });
             },
+
         },
         mounted() {
 
-
-
             var _this= this;
-
-            axios.post('http://localhost:4431/acquireCustoner',
-                {headers: {
-                    // 'Access-Control-Allow-Origin' : 'http://localhost:4431',
-                'Content-Type':'application/x-www-form-urlencoded'}}
-
-            ).then(function(res){
-                _this.originalArray = res.data;
-                _this.handledArray = res.data;
-            })
+            _this.acquireCustoner(1,5);
 
         },
 
