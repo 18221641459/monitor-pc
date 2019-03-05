@@ -23,6 +23,13 @@
               isHeader
       />
       <NavLink
+              header="销售品管理"
+              link="/app/offer"
+              iconName="flaticon-list"
+              index="offer"
+              isHeader
+      />
+      <NavLink
               header="数据报表"
               link="/app/statements"
               iconName="flaticon-user"

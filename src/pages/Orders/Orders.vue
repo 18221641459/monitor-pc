@@ -12,12 +12,24 @@
                 </div>
                 <input type="text" class="form-control" v-model="searchNames"  aria-label="Default" aria-describedby="inputGroup-sizing-default">
             </div>
-			<div class="input-group mb-3">
-			    <div class="input-group-prepend">
-			        <span class="input-group-text">流水号</span>
-			    </div>
-			    <input type="text" class="form-control" v-model="searchSerial"  aria-label="Default" aria-describedby="inputGroup-sizing-default">
-			</div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">流水号</span>
+                </div>
+                <input type="text" class="form-control" v-model="searchSerial"  aria-label="Default" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="clock">
+                <el-date-picker 
+                  v-model="start_end_time"
+                  type="datetimerange"
+                  :picker-options="pickerOptions2"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  size="small"
+                  align="right" > 
+                </el-date-picker>
+            </div>
             <button type="button" v-on:click="search" class="btn btn-sm btn-outline-secondary ">查询</button>
         </div>
 
@@ -42,17 +54,17 @@
                             <tbody>
                             <tr v-for="row in originalArray.list">
                                 <td>
-									{{row.serial}}
-								</td>
+                                    {{row.serial}}
+                                </td>
                                 <td>
                                     {{row.user_name}}
                                 </td>
                                 <td>
                                     {{row.price}}
                                 </td>
-								<td>
-									{{row.context}}
-								</td>
+                                <td>
+                                    {{row.context}}
+                                </td>
                                 <td>
                                     {{row.order_date}}
                                 </td>
@@ -82,7 +94,6 @@
                                     </li>
                                 </ul>
                             </nav>
-
                         </div>
 
                 </Widget>
@@ -108,74 +119,105 @@
         data() {
             return {
                 searchNames: '',
-				searchSerial: '',
+                searchSerial: '',
                 handledArray: [],
                 originalArray: [],
+                pickerOptions2: {
+                  shortcuts: [{
+                    text: '最近一周',
+                    onClick(picker) {
+                      const end = new Date();
+                      const start = new Date();
+                      start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                      picker.$emit('pick', [start, end]);
+                    }
+                  }, {
+                    text: '最近一个月',
+                    onClick(picker) {
+                      const end = new Date();
+                      const start = new Date();
+                      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                      picker.$emit('pick', [start, end]);
+                    }
+                  }, {
+                    text: '最近三个月',
+                    onClick(picker) {
+                      const end = new Date();
+                      const start = new Date();
+                      start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                      picker.$emit('pick', [start, end]);
+                    }
+                  }]
+                },
+                value4: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
+                start_end_time: ''
             };
         },
         methods: {
             search() {
                 let userName = this.searchNames;
-				let serial = this.searchSerial;
-				const url ='http://localhost:4431/orders/queryAllOrders';
-				var params = new URLSearchParams();
-				params.append("USER_NAME",userName);
-				params.append("SERIAL",serial);
-				this.$axios({
-					method: 'post',
-					url:url,
-					data:params
-				},{headers: {
-						'Access-Control-Allow-Origin' : 'http://localhost:4431',
-					}}
-					).then((res)=>{
-					this.originalArray = res.data;
-				});
+                let serial = this.searchSerial;
+                let startendtime = this.start_end_time;
+                const url ='http://localhost:4431/orders/queryAllOrders';
+                var params = new URLSearchParams();
+                params.append("USER_NAME",userName);
+                params.append("SERIAL",serial);
+                params.append("startendtime",startendtime);
+                this.$axios({
+                    method: 'post',
+                    url:url,
+                    data:params
+                },{headers: {
+                        'Access-Control-Allow-Origin' : 'http://localhost:4431',
+                    }}
+                    ).then((res)=>{
+                    this.originalArray = res.data;
+                });
             },
-			prePage() {
-				const url ='http://localhost:4431/orders/queryAllOrders';
-				var params = new URLSearchParams();
-				params.append("PageNum",this.originalArray.pageNum-1);
-				this.$axios({
-					method: 'post',
-					url:url,
-					data:params
-				},{headers: {
-						'Access-Control-Allow-Origin' : 'http://localhost:4431',
-					}}
-					).then((res)=>{
-					this.originalArray = res.data;
-				});
-			},
-			nextPage() {
-				const url ='http://localhost:4431/orders/queryAllOrders';
-				var params = new URLSearchParams();
-				params.append("PageNum",this.originalArray.pageNum+1);
-				this.$axios({
-					method: 'post',
-					url:url,
-					data:params
-				},{headers: {
-						'Access-Control-Allow-Origin' : 'http://localhost:4431',
-					}}
-					).then((res)=>{
-					this.originalArray = res.data;
-				});
+            prePage() {
+                const url ='http://localhost:4431/orders/queryAllOrders';
+                var params = new URLSearchParams();
+                params.append("PageNum",this.originalArray.pageNum-1);
+                this.$axios({
+                    method: 'post',
+                    url:url,
+                    data:params
+                },{headers: {
+                        'Access-Control-Allow-Origin' : 'http://localhost:4431',
+                    }}
+                    ).then((res)=>{
+                    this.originalArray = res.data;
+                });
+            },
+            nextPage() {
+                const url ='http://localhost:4431/orders/queryAllOrders';
+                var params = new URLSearchParams();
+                params.append("PageNum",this.originalArray.pageNum+1);
+                this.$axios({
+                    method: 'post',
+                    url:url,
+                    data:params
+                },{headers: {
+                        'Access-Control-Allow-Origin' : 'http://localhost:4431',
+                    }}
+                    ).then((res)=>{
+                    this.originalArray = res.data;
+                });
 			},
 			thisPage(pages) {
-				const url ='http://localhost:4431/orders/queryAllOrders';
-				var params = new URLSearchParams();
-				params.append("PageNum",pages.pages);
-				this.$axios({
-					method: 'post',
-					url:url,
-					data:params
-				},{headers: {
+                const url ='http://localhost:4431/orders/queryAllOrders';
+                var params = new URLSearchParams();
+                params.append("PageNum",pages.pages);
+                this.$axios({
+                    method: 'post',
+                    url:url,
+                    data:params
+                },{headers: {
 						'Access-Control-Allow-Origin' : 'http://localhost:4431',
-					}}
-					).then((res)=>{
-					this.originalArray = res.data;
-				});
+                    }}
+                    ).then((res)=>{
+                    this.originalArray = res.data;
+                });
 			}
         },
         mounted() {
